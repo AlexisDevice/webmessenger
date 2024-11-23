@@ -28,7 +28,7 @@
 
         .app .messages {
             display: flex;
-            flex-direction: column;
+            flex-direction: column-reverse;
             align-items: center;
             width: 100%;
             height: 90%;
@@ -64,6 +64,17 @@
             border-radius: 4px;
             font-size: calc(1vw + 1vh);
         }
+
+        @media screen and (max-width: 600px) {
+            .app {
+                width: 100%;
+                height: 75vh;
+            }
+
+            .app .tools input {
+                width: 100%;
+            }
+        }
     </style>
     <div class="app">
         <div class="messages" id="messages"></div>
@@ -88,6 +99,7 @@
         }
 
         text.addEventListener('keyup', (e) => {
+            e.preventDefault();
             if(e.keyCode == 13) {
                 send();
             }
