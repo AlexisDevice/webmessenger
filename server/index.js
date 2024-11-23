@@ -1,14 +1,24 @@
 import express from "express";
+import { Server } from "socket.io";
+import { createServer } from 'node:http';
 
 const port = 3000;
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
+
+io.on('connection', (socket) => {
+    socket.on('chat-message', (msg) => {
+        socket.emit('new-message', msg);
+    })
+})
 
 app.get('/', (req, res) => {
-    res.send('<h1>Hola Mundo!</h1>');
+    res.sendFile(process.cwd() + '/client/index.html');
 });
 
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log('Server live: ' + port);
 });
