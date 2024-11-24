@@ -35,13 +35,27 @@
         }
 
         .app .messages .message {
-            padding: 2px 10px;
+            padding: 5px 30px;
             margin: 5px;
             color: #f5f5f5;
-            background-color: #ff6700;
             font-family: sans-serif;
             font-size: calc(1vw + 1vh);
-            border-radius: 8px;
+        }
+        
+        .app .messages .message.my-msg {
+            margin-right: 10px;
+            padding-right: 50px;
+            align-self: flex-end;
+            background-color: #403d39;
+            border-radius: 8px 0px 8px 8px;
+        }
+
+        .app .messages .message.other-msg {
+            margin-left: 10px;
+            padding-left: 20px;
+            align-self: flex-start;
+            background-color: #eb5e28;
+            border-radius: 0px 8px 8px 8px;
         }
 
         .app .tools {
@@ -88,9 +102,22 @@
         let messeges = document.getElementById('messages');
         let text = document.getElementById('textbox');
 
-        socket.on('new-message', (msg) => {
-            const item = `<span class="message">${msg}</span>`;
-            messeges.insertAdjacentHTML('beforeend', item);
+        socket.on('new-message', (data) => {
+            const item = document.createElement('span');
+            item.textContent = data.text;
+            item.classList.add('message');
+
+            if (data.id === socket.id) {
+                item.classList.add('my-msg');
+            } else {
+                item.classList.add('other-msg');
+            }
+
+            if (messeges.hasChildNodes()) {
+                messeges.insertBefore(item, messeges.firstChild);
+            } else {
+                messeges.appendChild(item);
+            }
         });
 
         function send() {
